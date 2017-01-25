@@ -41,8 +41,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.mcxiaoke.koi:core:0.5.3'
     compile 'com.android.support:support-v4:25.1.0'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 }
 repositories {
     mavenCentral()
