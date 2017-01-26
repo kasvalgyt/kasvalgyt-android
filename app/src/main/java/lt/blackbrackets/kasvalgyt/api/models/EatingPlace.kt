@@ -1,33 +1,50 @@
 package lt.blackbrackets.kasvalgyt.api.models
 
+import android.databinding.BaseObservable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-
+import com.squareup.picasso.Picasso
+import android.databinding.BindingAdapter
+import android.widget.ImageView
+import android.content.Intent
+import android.net.Uri
 
 
 /**
  * Created by simonas on 25/01/2017.
  */
 
-class EatingPlace {
+class EatingPlace : BaseObservable() {
+    @SerializedName("page_picture")
     @Expose
-    private val pagePicture: String? = null
+    var pagePicture: String? = null
+
     @SerializedName("page_name")
     @Expose
-    private val pageName: String? = null
+    var pageName: String? = null
+
     @SerializedName("page_location")
     @Expose
-    private val pageLocation: PageLocation? = null
+    var pageLocation: PageLocation? = null
+
     @SerializedName("page_wifi")
     @Expose
-    private val pageWifi: Any? = null
+    var pageWifi: String? = null
+
     @SerializedName("page_link")
     @Expose
-    private val pageLink: String? = null
+    var pageLink: String? = null
+
     @SerializedName("message")
     @Expose
-    private val message: String? = null
+    var message: String? = null
+
     @SerializedName("image")
     @Expose
-    private val image: String? = null
+    var mealImage: String? = null
+}
+
+@BindingAdapter("bind:imageUrl")
+fun loadImage(view: ImageView?, url: String?) {
+    Picasso.with(view!!.context).load(url).into(view)
 }

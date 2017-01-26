@@ -7,23 +7,23 @@ import com.google.gson.annotations.SerializedName
  * Created by simonas on 25/01/2017.
  */
 
-class PageLocation {
+class PageLocation (
     @SerializedName("city")
     @Expose
-    private val city = ThreadLocal<String>()
+    val city : String? = null,
     @SerializedName("country")
     @Expose
-    private val country: String? = null
+    val country: String? = null,
     @SerializedName("latitude")
     @Expose
-    private val latitude: Double? = null
+    val latitude: Double? = null,
     @SerializedName("longitude")
     @Expose
-    private val longitude: Double? = null
+    val longitude: Double? = null,
     @SerializedName("street")
     @Expose
-    private val street: String? = null
+    val street: String? = null,
     @SerializedName("zip")
     @Expose
-    private val zip: String? = null
-}
+    val zip: String? = null
+)
