@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "892525754877",
+    "firebase_url": "https://kas-valgyt.firebaseio.com",
+    "project_id": "kas-valgyt",
+    "storage_bucket": "kas-valgyt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892525754877:android:c44dd8f46bb5db1b",
+        "android_client_info": {
+          "package_name": "lt.blackbrackets.kasvalgyt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892525754877-vsml9hi0g66rfu2gl6p5qskn4o5kecvj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "lt.blackbrackets.kasvalgyt",
+            "certificate_hash": "F68F1306D78F091AACE2C51BE80C761845E0BA3C"
+          }
+        },
+        {
+          "client_id": "892525754877-r66ep5pth0u87oabjgk20tsrqetqhn2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0qhtixfmlCy39SC0HYkrdLOlTsloM6Kk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892525754877-r66ep5pth0u87oabjgk20tsrqetqhn2m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

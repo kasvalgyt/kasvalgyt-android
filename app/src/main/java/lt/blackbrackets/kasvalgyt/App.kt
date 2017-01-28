@@ -19,9 +19,9 @@ class App : Application() {
         val builder = Picasso.Builder(this)
         builder.downloader(OkHttpDownloader(this, Integer.MAX_VALUE.toLong()))
         builder.memoryCache(LruCache(24000))
-        builder.indicatorsEnabled(true)
-        builder.loggingEnabled(true)
         val built = builder.build()
         Picasso.setSingletonInstance(built)
+
+        Rollbar.init(this, "6021b3f0353843bfaec8ee3dd8af0214", "production");
     }
 }

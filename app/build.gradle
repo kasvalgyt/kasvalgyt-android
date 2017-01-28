@@ -55,6 +55,7 @@ dependencies {
     compile 'com.patloew.rxlocation:rxlocation:1.0.1'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.4'
+    compile 'com.rollbar:rollbar-android:0.2.0'
 
     //RX Retrofit
     compile'com.google.code.gson:gson:2.4'
@@ -74,3 +75,5 @@ repositories {
 kapt {
     generateStubs = true
 }
+
+apply plugin: 'com.google.gms.google-services'
