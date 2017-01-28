@@ -1,6 +1,7 @@
 package lt.blackbrackets.kasvalgyt
 
 import android.app.Application
+import com.squareup.picasso.LruCache
 import com.squareup.picasso.OkHttpDownloader
 import com.squareup.picasso.Picasso
 
@@ -17,6 +18,9 @@ class App : Application() {
 
         val builder = Picasso.Builder(this)
         builder.downloader(OkHttpDownloader(this, Integer.MAX_VALUE.toLong()))
+        builder.memoryCache(LruCache(24000))
+        builder.indicatorsEnabled(true)
+        builder.loggingEnabled(true)
         val built = builder.build()
         Picasso.setSingletonInstance(built)
     }

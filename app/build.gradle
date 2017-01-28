@@ -53,7 +53,8 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
     compile 'com.patloew.rxlocation:rxlocation:1.0.1'
-    compile 'com.github.raviteja06:RxPermissions:1.2.0'
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.4'
 
     //RX Retrofit
     compile'com.google.code.gson:gson:2.4'

@@ -1,5 +1,6 @@
 package lt.blackbrackets.kasvalgyt.api.models
 
+import android.location.Location
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -26,4 +27,11 @@ class PageLocation (
     @SerializedName("zip")
     @Expose
     val zip: String? = null
-)
+) {
+    fun getLocation(): Location {
+        var loc = Location("")
+        loc.latitude = latitude!!
+        loc.longitude = longitude!!
+        return loc
+    }
+}

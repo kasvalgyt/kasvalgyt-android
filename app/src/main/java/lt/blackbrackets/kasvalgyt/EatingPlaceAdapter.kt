@@ -2,6 +2,7 @@ package lt.blackbrackets.kasvalgyt
 
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.location.Location
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +10,20 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.place_item.view.*
 import lt.blackbrackets.kasvalgyt.databinding.PlaceItemBinding
 import android.view.View.GONE
+import com.squareup.picasso.Picasso
 import lt.blackbrackets.kasvalgyt.api.models.EatingPlace
 import lt.blackbrackets.kasvalgyt.utils.Intents
+import kotlin.comparisons.compareBy
 
 
 /**
  * Created by simonas on 26/01/2017.
  */
-class EatingPlaceAdapter(val c : Context) : RecyclerView.Adapter<EatingPlaceAdapter.ViewHolder>() {
-    var placeList = mutableListOf<EatingPlace>()
+class EatingPlaceAdapter(val c : Context, var location: Location) : RecyclerView.Adapter<EatingPlaceAdapter.ViewHolder>() {
+    var placeList = listOf<EatingPlace>()
+        set(value) {
+            field = value.sortedWith(compareBy { it.getDistanceInM(location) })
+        }
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
@@ -47,6 +53,11 @@ class EatingPlaceAdapter(val c : Context) : RecyclerView.Adapter<EatingPlaceAdap
         if (item.message == null) {
             holder!!.itemView.messageTx.visibility = GONE
         }
+
+        holder!!.itemView.distanceTx.text = item.getDistanceString(location)
+
+        Picasso.with(c).load(item.mealImage).into(holder!!.itemView.mealImageView)
+        Picasso.with(c).load(item.pagePicture).into(holder!!.itemView.pageImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

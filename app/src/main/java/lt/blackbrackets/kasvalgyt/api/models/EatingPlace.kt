@@ -3,11 +3,7 @@ package lt.blackbrackets.kasvalgyt.api.models
 import android.databinding.BaseObservable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.squareup.picasso.Picasso
-import android.databinding.BindingAdapter
-import android.widget.ImageView
-import android.content.Intent
-import android.net.Uri
+import android.location.Location
 
 
 /**
@@ -42,9 +38,13 @@ class EatingPlace : BaseObservable() {
     @SerializedName("image")
     @Expose
     var mealImage: String? = null
-}
 
-@BindingAdapter("bind:imageUrl")
-fun loadImage(view: ImageView?, url: String?) {
-    Picasso.with(view!!.context).load(url).into(view)
+    fun getDistanceInM(loc: Location)
+            = pageLocation!!.getLocation().distanceTo(loc)
+
+    fun getDistanceInKm(loc: Location)
+            = getDistanceInM(loc) / 1000
+
+    fun getDistanceString(loc: Location)
+            = getDistanceInKm(loc).toInt().toString() + " km"
 }

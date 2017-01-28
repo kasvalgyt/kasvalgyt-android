@@ -7,11 +7,34 @@
     android:clipToPadding="false"
     tools:context="lt.blackbrackets.kasvalgyt.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <RelativeLayout
+        android:id="@+id/contentHolder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="?android:attr/actionBarSize"
-        android:clipToPadding="false" />
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="?android:attr/actionBarSize"
+            android:clipToPadding="false" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingHolder"
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/loaderGif"
+            android:layout_width="72dp"
+            android:layout_height="72dp"/>
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

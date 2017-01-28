@@ -9,51 +9,29 @@ import com.mcxiaoke.koi.ext.dpToPx
 import lt.blackbrackets.kasvalgyt.api.models.EatingPlace
 import java.util.*
 import com.readystatesoftware.systembartint.SystemBarTintManager
-import android.util.TypedValue
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
-import com.apt7.rxpermissions.Permission
-import com.apt7.rxpermissions.PermissionObservable
+import android.view.View
 import com.google.android.gms.location.LocationRequest
 import com.mcxiaoke.koi.log.logd
 import com.mcxiaoke.koi.log.loge
 import com.mcxiaoke.koi.utils.currentVersion
 import com.patloew.rxlocation.RxLocation
-import io.reactivex.observers.DisposableObserver
 import kotlinx.android.synthetic.main.activity_main.*
 import lt.blackbrackets.kasvalgyt.api.ApiClient
-import lt.blackbrackets.kasvalgyt.utils.addAlphaToColor
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-
+import com.tbruyelle.rxpermissions2.RxPermissions
+import lt.blackbrackets.kasvalgyt.utils.*
 
 class MainActivity : AppCompatActivity() {
-    lateinit var mAdapter: EatingPlaceAdapter
-
+    var onCreateAt : Long = System.currentTimeMillis()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        PermissionObservable.getInstance().checkThePermissionStatus(this,
-                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-                .subscribe(object : DisposableObserver<Permission>() {
-                    override fun onError(e: Throwable?) {
-
-                    }
-
-                    override fun onComplete() {
-                        getLocation(applicationContext) {
-                            location -> logd { location.toString() }
-                        }
-                    }
-
-                    override fun onNext(value: Permission?) {
-
-                    }
-
-                })
+        val rxPermissions = RxPermissions(this)
 
         supportActionBar!!.setIcon(R.mipmap.kas_valgyt_icon)
         supportActionBar!!.setDisplayUseLogoEnabled(true)
@@ -78,7 +56,6 @@ class MainActivity : AppCompatActivity() {
             recyclerView.setPadding(0, height, 0, 48.dpToPx())
         }
 
-        mAdapter = EatingPlaceAdapter(this)
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -88,23 +65,55 @@ class MainActivity : AppCompatActivity() {
         val mLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = mLayoutManager
 
+        rxPermissions
+                .request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+                .subscribe { item ->
+                    if (item) {
+                        getLocation(applicationContext) { location ->
+                            getPlaces(location)
+                        }
+                    }
+                }
+
+        onCreateAt = System.currentTimeMillis()
+
+        loaderGif.setImageResource(R.drawable.pin_eye_256)
+    }
+
+    fun getPlaces(location: Location) {
         var cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_MONTH, -1)
         ApiClient.getPlacesObservable(cal)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    items -> logd(items.toString());
-                    setItems(items)
+                    items -> logd(items.toString())
+                    setItems(items, location)
+                    showContentView()
                 }, {
                     error -> loge("Wat"+error.toString())
                 })
     }
 
-    fun setItems(items : List<EatingPlace>) {
-        mAdapter.placeList.clear()
-        mAdapter.placeList.addAll(items)
-        recyclerView.adapter = mAdapter
+    fun showContentView() {
+        var base = 1000L
+        var delay : Long = base + (1000 * Math.random()).toLong()
+        var diff = System.currentTimeMillis() - onCreateAt
+        if (diff < delay) {
+            delay -= diff
+        }
+
+        contentHolder.alpha = 0f
+        contentHolder.visibility = View.VISIBLE
+        contentHolder.animate().alpha(1f).setStartDelay(delay).start()
+        loadingHolder.animate().alpha(0f).setStartDelay(delay).start()
+
+    }
+
+    fun setItems(items : List<EatingPlace>, location: Location) {
+        var adapter = EatingPlaceAdapter(this, location)
+        adapter.placeList = items
+        recyclerView.adapter = adapter
     }
 }
 
@@ -115,34 +124,10 @@ fun getLocation(context: Context, f:(location: Location) -> Unit) {
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval(5000)
 
-    locationRequest.numUpdates = 3
+    locationRequest.numUpdates = 1
 
     rxLocation.location().updates(locationRequest)
             .subscribe { address ->
                 f.invoke(address)
             }
-}
-
-fun getActionBarHeight(context: Context): Int {
-    val typedValue = TypedValue()
-
-    var attributeResourceId = android.R.attr.actionBarSize
-    if (context is AppCompatActivity) {
-        attributeResourceId = R.attr.actionBarSize
-    }
-
-    if (context.theme.resolveAttribute(attributeResourceId, typedValue, true)) {
-        return TypedValue.complexToDimensionPixelSize(typedValue.data, context.resources.displayMetrics)
-    }
-
-    return 48.dpToPx()
-}
-
-fun getStatusBarHeight(c : Context): Int {
-    var result = 0
-    val resourceId = c.getResources().getIdentifier("status_bar_height", "dimen", "android")
-    if (resourceId > 0) {
-        result = c.getResources().getDimensionPixelSize(resourceId)
-    }
-    return result
 }
