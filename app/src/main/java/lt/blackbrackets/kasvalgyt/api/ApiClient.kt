@@ -27,5 +27,5 @@ object ApiClient {
      */
     fun getPlacesObservable(nowCal : Calendar)
 //        = retrofit.create(KasValgytApi::class.java).getPlaces(format.format(nowCal.time))
-        = retrofit.create(KasValgytApi::class.java).getPlaces("2017-01-26")
+            = retrofit.create(KasValgytApi::class.java).getPlaces("2017-01-25")
 }

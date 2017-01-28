@@ -31,8 +31,8 @@
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/loaderGif"
-            android:layout_width="72dp"
-            android:layout_height="72dp"/>
+            android:layout_width="48dp"
+            android:layout_height="48dp"/>
 
     </RelativeLayout>
 

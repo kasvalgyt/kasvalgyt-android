@@ -77,12 +77,11 @@ class MainActivity : AppCompatActivity() {
 
         onCreateAt = System.currentTimeMillis()
 
-        loaderGif.setImageResource(R.drawable.pin_eye_256)
+        loaderGif.setImageResource(R.drawable.pin_144)
     }
 
     fun getPlaces(location: Location) {
         var cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_MONTH, -1)
         ApiClient.getPlacesObservable(cal)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -91,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                     setItems(items, location)
                     showContentView()
                 }, {
-                    error -> loge("Wat"+error.toString())
+                    error -> logd("Wat"+error.toString())
                 })
     }
 
@@ -123,11 +122,15 @@ fun getLocation(context: Context, f:(location: Location) -> Unit) {
     val locationRequest = LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval(5000)
+            .setExpirationDuration(30000)
 
     locationRequest.numUpdates = 1
 
     rxLocation.location().updates(locationRequest)
-            .subscribe { address ->
+            .subscribe({ address ->
                 f.invoke(address)
-            }
+            }, { error ->
+                logd("wat", error.toString() )
+            })
+
 }
