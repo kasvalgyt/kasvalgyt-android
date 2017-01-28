@@ -50,6 +50,10 @@ dependencies {
     compile 'com.chibatching:kotpref:1.6.0'
     compile 'com.github.nitrico.fontbinder:fontbinder:1.0.4'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    compile 'com.patloew.rxlocation:rxlocation:1.0.1'
+    compile 'com.github.raviteja06:RxPermissions:1.2.0'
 
     //RX Retrofit
     compile'com.google.code.gson:gson:2.4'
@@ -62,6 +66,7 @@ dependencies {
 }
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 

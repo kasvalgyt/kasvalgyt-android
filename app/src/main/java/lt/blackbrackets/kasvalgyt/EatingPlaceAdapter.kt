@@ -1,16 +1,17 @@
-package lt.blackbrackets.kasvalgyt.api.models
+package lt.blackbrackets.kasvalgyt
 
 import android.content.Context
-import android.content.Intent
-
 import android.databinding.DataBindingUtil
-import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.place_item.view.*
 import lt.blackbrackets.kasvalgyt.databinding.PlaceItemBinding
+import android.view.View.GONE
+import lt.blackbrackets.kasvalgyt.api.models.EatingPlace
+import lt.blackbrackets.kasvalgyt.utils.Intents
+
 
 /**
  * Created by simonas on 26/01/2017.
@@ -27,9 +28,24 @@ class EatingPlaceAdapter(val c : Context) : RecyclerView.Adapter<EatingPlaceAdap
         binding.item = item
 
         holder!!.itemView.openButton.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse(item.pageLink)
-            c.startActivity(i)
+            var pageId = item.pageLink!!.removePrefix("http://facebook.com/")
+            Intents.openFbPage(c, pageId)
+        }
+
+        if (item.pageLocation != null && item.pageLocation!!.latitude != null && item.pageLocation!!.longitude != null) {
+            holder!!.itemView.locationButton.setOnClickListener {
+                Intents.openNav(c, item.pageLocation!!.latitude!!.toFloat(), item.pageLocation!!.longitude!!.toFloat())
+            }
+        } else {
+            holder!!.itemView.locationButton.visibility = GONE
+        }
+
+        if (item.mealImage == null) {
+            holder!!.itemView.mealImageView.visibility = GONE
+        }
+
+        if (item.message == null) {
+            holder!!.itemView.messageTx.visibility = GONE
         }
     }
 

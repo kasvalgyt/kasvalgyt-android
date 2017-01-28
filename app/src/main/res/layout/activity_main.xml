@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    tools:context="lt.blackbrackets.kasvalgyt.api.MainActivity">
+    tools:context="lt.blackbrackets.kasvalgyt.MainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

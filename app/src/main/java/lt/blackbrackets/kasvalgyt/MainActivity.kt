@@ -1,27 +1,31 @@
-package lt.blackbrackets.kasvalgyt.api
+package lt.blackbrackets.kasvalgyt
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.mcxiaoke.koi.ext.dpToPx
-import com.mcxiaoke.koi.ext.pxToDp
-import com.mcxiaoke.koi.log.logd
-import com.mcxiaoke.koi.log.loge
-import com.mcxiaoke.koi.utils.currentVersion
-import kotlinx.android.synthetic.main.activity_main.*
-import lt.blackbrackets.kasvalgyt.R
 import lt.blackbrackets.kasvalgyt.api.models.EatingPlace
-import lt.blackbrackets.kasvalgyt.api.models.EatingPlaceAdapter
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import java.util.*
 import com.readystatesoftware.systembartint.SystemBarTintManager
-import android.R.attr.data
 import android.util.TypedValue
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
+import android.location.Location
+import com.apt7.rxpermissions.Permission
+import com.apt7.rxpermissions.PermissionObservable
+import com.google.android.gms.location.LocationRequest
+import com.mcxiaoke.koi.log.logd
+import com.mcxiaoke.koi.log.loge
+import com.mcxiaoke.koi.utils.currentVersion
+import com.patloew.rxlocation.RxLocation
+import io.reactivex.observers.DisposableObserver
+import kotlinx.android.synthetic.main.activity_main.*
+import lt.blackbrackets.kasvalgyt.api.ApiClient
+import lt.blackbrackets.kasvalgyt.utils.addAlphaToColor
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +34,32 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        PermissionObservable.getInstance().checkThePermissionStatus(this,
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+                .subscribe(object : DisposableObserver<Permission>() {
+                    override fun onError(e: Throwable?) {
+
+                    }
+
+                    override fun onComplete() {
+                        getLocation(applicationContext) {
+                            location -> logd { location.toString() }
+                        }
+                    }
+
+                    override fun onNext(value: Permission?) {
+
+                    }
+
+                })
+
+        supportActionBar!!.setIcon(R.mipmap.kas_valgyt_icon)
+        supportActionBar!!.setDisplayUseLogoEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        supportActionBar!!.title = "   " + resources.getString(R.string.app_name)
+
         @SuppressLint("NewApi")
         if(currentVersion() >= 19) {
             val tintManager = SystemBarTintManager(this)
@@ -39,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             tintManager.setStatusBarTintColor(resources.getColor(R.color.nav_bar))
 
             var drawable = ColorDrawable()
-            drawable.color = resources.getColor(R.color.colorPrimary).addAlphaToColor(230i)
+            drawable.color = resources.getColor(R.color.colorPrimary).addAlphaToColor(230)
             supportActionBar!!.setBackgroundDrawable(drawable)
 
             var height = getActionBarHeight(this) + getStatusBarHeight(this)
@@ -76,6 +106,21 @@ class MainActivity : AppCompatActivity() {
         mAdapter.placeList.addAll(items)
         recyclerView.adapter = mAdapter
     }
+}
+
+fun getLocation(context: Context, f:(location: Location) -> Unit) {
+    val rxLocation = RxLocation(context)
+
+    val locationRequest = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            .setInterval(5000)
+
+    locationRequest.numUpdates = 3
+
+    rxLocation.location().updates(locationRequest)
+            .subscribe { address ->
+                f.invoke(address)
+            }
 }
 
 fun getActionBarHeight(context: Context): Int {
