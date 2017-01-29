@@ -3,6 +3,7 @@ package lt.blackbrackets.kasvalgyt
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.location.Location
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -56,6 +57,8 @@ class EatingPlaceAdapter(val c : Context, var location: Location) : RecyclerView
         if (item.message == null) {
             holder.itemView.messageTx.visibility = GONE
         }
+
+        DrawableCompat.setTint(holder.itemView.locationButton.background, c.resources.getColor(R.color.colorPrimary))
 
         holder.itemView.distanceTx.text = item.getDistanceString(location)
 
