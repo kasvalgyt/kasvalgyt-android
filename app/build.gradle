@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -16,6 +17,7 @@ android {
         versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -28,6 +30,8 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
     }
 }
 
@@ -36,16 +40,18 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    compile 'com.google.android.gms:play-services:10.0.1'
+
     compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     kapt 'com.android.databinding:compiler:2.2.3'
+    compile 'com.android.support:multidex:1.0.1'
 
-    compile 'io.nlopez.smartlocation:library:3.2.11'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.mcxiaoke.koi:core:0.5.3'
-    compile 'com.android.support:support-v4:25.1.0'
     compile 'com.github.nitrico.lastadapter:lastadapter:2.0.0'
     compile 'com.chibatching:kotpref:1.6.0'
     compile 'com.github.nitrico.fontbinder:fontbinder:1.0.4'
@@ -66,11 +72,11 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
 
 }
+
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
 }
-
 
 kapt {
     generateStubs = true

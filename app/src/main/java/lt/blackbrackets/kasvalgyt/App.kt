@@ -1,17 +1,16 @@
 package lt.blackbrackets.kasvalgyt
 
-import android.app.Application
+import android.support.multidex.MultiDexApplication
+import com.rollbar.android.Rollbar
 import com.squareup.picasso.LruCache
 import com.squareup.picasso.OkHttpDownloader
 import com.squareup.picasso.Picasso
-
-
 
 /**
  * Created by simonas on 27/01/2017.
  */
 
-class App : Application() {
+class App : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()

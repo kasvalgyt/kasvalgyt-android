@@ -29,35 +29,38 @@ class EatingPlaceAdapter(val c : Context, var location: Location) : RecyclerView
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         var item = placeList[position]
-        var binding : PlaceItemBinding = DataBindingUtil.getBinding(holder!!.itemView)
+        if (holder == null) return
+
+
+        var binding : PlaceItemBinding = DataBindingUtil.getBinding(holder.itemView)
         item.pagePicture += "&height=480"
         binding.item = item
 
-        holder!!.itemView.openButton.setOnClickListener {
+        holder.itemView.openButton.setOnClickListener {
             var pageId = item.pageLink!!.removePrefix("http://facebook.com/")
             Intents.openFbPage(c, pageId)
         }
 
         if (item.pageLocation != null && item.pageLocation!!.latitude != null && item.pageLocation!!.longitude != null) {
-            holder!!.itemView.locationButton.setOnClickListener {
+            holder.itemView.locationButton.setOnClickListener {
                 Intents.openNav(c, item.pageLocation!!.latitude!!.toFloat(), item.pageLocation!!.longitude!!.toFloat())
             }
         } else {
-            holder!!.itemView.locationButton.visibility = GONE
+            holder.itemView.locationButton.visibility = GONE
         }
 
         if (item.mealImage == null) {
-            holder!!.itemView.mealImageView.visibility = GONE
+            holder.itemView.mealImageView.visibility = GONE
         }
 
         if (item.message == null) {
-            holder!!.itemView.messageTx.visibility = GONE
+            holder.itemView.messageTx.visibility = GONE
         }
 
-        holder!!.itemView.distanceTx.text = item.getDistanceString(location)
+        holder.itemView.distanceTx.text = item.getDistanceString(location)
 
-        Picasso.with(c).load(item.mealImage).into(holder!!.itemView.mealImageView)
-        Picasso.with(c).load(item.pagePicture).into(holder!!.itemView.pageImageView)
+        Picasso.with(c).load(item.mealImage).into(holder.itemView.mealImageView)
+        Picasso.with(c).load(item.pagePicture).into(holder.itemView.pageImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

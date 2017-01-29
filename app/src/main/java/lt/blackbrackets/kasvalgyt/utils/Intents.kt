@@ -17,6 +17,8 @@ import android.support.v4.content.ContextCompat.startActivity
  */
 
 object Intents {
+    val FACEBOOK_PACKAGE_NAME = "com.facebook.katana"
+
     fun openNav(c: Context, lat: Float, lgn: Float) {
         val gmmIntentUri = Uri.parse("google.navigation:q=$lat,$lgn")
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
@@ -30,16 +32,22 @@ object Intents {
 
     //method to get the right URL to use in the intent
     fun openFbPage(context: Context, pageId: String) {
-        val packageManager = context.packageManager
-        var facebookUrl = ""
-        try {
-            facebookUrl = "fb://page/" + pageId
-        } catch (e: PackageManager.NameNotFoundException) {
-            facebookUrl = "href=https://www.facebook.com/"+pageId //normal web url
+        if (Intents.isPackageExists(context, Intents.FACEBOOK_PACKAGE_NAME)) {
+            var facebookUrl = "fb://page/" + pageId
+            val facebookIntent = Intent(Intent.ACTION_VIEW)
+            facebookIntent.data = Uri.parse(facebookUrl)
+            context.startActivity(facebookIntent)
+        } else {
+            var facebookUri = Uri.parse("https://www.facebook.com/" + pageId)
+            var intent = Intent(Intent.ACTION_VIEW, facebookUri)
+            context.startActivity(intent)
         }
+    }
 
-        val facebookIntent = Intent(Intent.ACTION_VIEW)
-        facebookIntent.data = Uri.parse(facebookUrl)
-        context.startActivity(facebookIntent)
+    fun isPackageExists(context: Context, targetPackage: String): Boolean {
+        val pm = context.packageManager
+        val packages = pm.getInstalledApplications(0)
+        packages.forEach { if (it.packageName == targetPackage) return true }
+        return false
     }
 }

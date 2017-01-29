@@ -40,3 +40,4 @@ fun getStatusBarHeight(c : Context): Int {
     }
     return result
 }
+
