@@ -5,9 +5,6 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.facebook.imagepipeline.decoder.SimpleProgressiveJpegConfig
 import com.rollbar.android.Rollbar
-import com.squareup.picasso.LruCache
-import com.squareup.picasso.OkHttpDownloader
-import com.squareup.picasso.Picasso
 
 /**
  * Created by simonas on 27/01/2017.
