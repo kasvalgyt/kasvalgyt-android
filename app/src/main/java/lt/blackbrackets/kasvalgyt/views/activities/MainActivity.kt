@@ -1,6 +1,5 @@
-package lt.blackbrackets.kasvalgyt
+package lt.blackbrackets.kasvalgyt.views.activities
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -15,23 +14,22 @@ import android.location.Location
 import android.view.View
 import com.google.android.gms.location.LocationRequest
 import com.mcxiaoke.koi.log.logd
-import com.mcxiaoke.koi.log.loge
 import com.mcxiaoke.koi.utils.currentVersion
 import com.patloew.rxlocation.RxLocation
 import kotlinx.android.synthetic.main.activity_main.*
+import lt.blackbrackets.kasvalgyt.R
+import lt.blackbrackets.kasvalgyt.adapters.EatingPlaceAdapter
 import lt.blackbrackets.kasvalgyt.api.ApiClient
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import com.tbruyelle.rxpermissions2.RxPermissions
 import lt.blackbrackets.kasvalgyt.utils.*
 
 class MainActivity : AppCompatActivity() {
     var onCreateAt : Long = System.currentTimeMillis()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val rxPermissions = RxPermissions(this)
 
         supportActionBar!!.setIcon(R.mipmap.kas_valgyt_icon)
         supportActionBar!!.setDisplayUseLogoEnabled(true)
@@ -39,18 +37,18 @@ class MainActivity : AppCompatActivity() {
         supportActionBar!!.title = "   " + resources.getString(R.string.app_name)
 
         @SuppressLint("NewApi")
-        if(currentVersion() >= 19) {
+        if (currentVersion() >= 19) {
             val tintManager = SystemBarTintManager(this)
             tintManager.setNavigationBarTintEnabled(true)
             tintManager.isStatusBarTintEnabled = true
             tintManager.setNavigationBarTintColor(resources.getColor(R.color.nav_bar))
             tintManager.setStatusBarTintColor(resources.getColor(R.color.nav_bar))
 
-            var drawable = ColorDrawable()
+            val drawable = ColorDrawable()
             drawable.color = resources.getColor(R.color.colorPrimary).addAlphaToColor(230)
             supportActionBar!!.setBackgroundDrawable(drawable)
 
-            var height = getActionBarHeight(this) + getStatusBarHeight(this)
+            val height = getActionBarHeight(this) + getStatusBarHeight(this)
 
             recyclerView.setPaddingRelative(0, height, 0, 48.dpToPx())
             recyclerView.setPadding(0, height, 0, 48.dpToPx())
@@ -65,15 +63,9 @@ class MainActivity : AppCompatActivity() {
         val mLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = mLayoutManager
 
-        rxPermissions
-                .request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-                .subscribe { item ->
-                    if (item) {
-                        getLocation(applicationContext) { location ->
-                            getPlaces(location)
-                        }
-                    }
-                }
+        getLocation(applicationContext) { location ->
+            getPlaces(location)
+        }
 
         onCreateAt = System.currentTimeMillis()
 
@@ -81,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getPlaces(location: Location) {
-        var cal = Calendar.getInstance()
+        val cal = Calendar.getInstance()
         ApiClient.getPlacesObservable(cal)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -95,9 +87,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showContentView() {
-        var base = 1000L
+        val base = 1000L
         var delay : Long = base + (1000 * Math.random()).toLong()
-        var diff = System.currentTimeMillis() - onCreateAt
+        val diff = System.currentTimeMillis() - onCreateAt
         if (diff < delay) {
             delay -= diff
         }
@@ -106,12 +98,12 @@ class MainActivity : AppCompatActivity() {
         contentHolder.visibility = View.VISIBLE
         contentHolder.animate().alpha(1f).setStartDelay(delay).start()
         loadingHolder.animate().alpha(0f).setStartDelay(delay).start()
-
     }
 
     fun setItems(items : List<EatingPlace>, location: Location) {
-        var adapter = EatingPlaceAdapter(this, location)
+        val adapter = EatingPlaceAdapter(this, location)
         adapter.placeList = items
+        recyclerView.removeAllViews()
         recyclerView.adapter = adapter
     }
 }

@@ -1,17 +1,16 @@
-package lt.blackbrackets.kasvalgyt
+package lt.blackbrackets.kasvalgyt.adapters
 
 import android.content.Context
-import android.databinding.DataBindingUtil
 import android.location.Location
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.place_item.view.*
-import lt.blackbrackets.kasvalgyt.databinding.PlaceItemBinding
 import android.view.View.GONE
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.place_item.view.*
+import lt.blackbrackets.kasvalgyt.R
 import lt.blackbrackets.kasvalgyt.api.models.EatingPlace
 import lt.blackbrackets.kasvalgyt.utils.Intents
 import kotlin.comparisons.compareBy
@@ -29,13 +28,14 @@ class EatingPlaceAdapter(val c : Context, var location: Location) : RecyclerView
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        var item = placeList[position]
+        val item = placeList[position]
+        item.pagePicture += "&height=480"
+
         if (holder == null) return
 
-
-        var binding : PlaceItemBinding = DataBindingUtil.getBinding(holder.itemView)
-        item.pagePicture += "&height=480"
-        binding.item = item
+        holder.itemView.messageTx.text = item.message
+        holder.itemView.pageNameTx.text = item.pageName
+        holder.itemView.distanceTx.text = item.getDistanceString(location)
 
         holder.itemView.openButton.setOnClickListener {
             var pageId = item.pageLink!!.removePrefix("http://facebook.com/")
@@ -58,7 +58,10 @@ class EatingPlaceAdapter(val c : Context, var location: Location) : RecyclerView
             holder.itemView.messageTx.visibility = GONE
         }
 
-        DrawableCompat.setTint(holder.itemView.locationButton.background, c.resources.getColor(R.color.colorPrimary))
+        DrawableCompat.setTint(
+                holder.itemView.locationButton.background,
+                c.resources.getColor(R.color.colorPrimary)
+        )
 
         holder.itemView.distanceTx.text = item.getDistanceString(location)
 
@@ -67,7 +70,7 @@ class EatingPlaceAdapter(val c : Context, var location: Location) : RecyclerView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = PlaceItemBinding.inflate(LayoutInflater.from(c), parent, false).root
+        val view = LayoutInflater.from(c).inflate(R.layout.place_item, null)
         val viewholder = ViewHolder(view)
         return viewholder
     }

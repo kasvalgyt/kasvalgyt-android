@@ -17,7 +17,7 @@ class App : MultiDexApplication() {
 
         val builder = Picasso.Builder(this)
         builder.downloader(OkHttpDownloader(this, Integer.MAX_VALUE.toLong()))
-        builder.memoryCache(LruCache(24000))
+        builder.memoryCache(LruCache(102400))
         val built = builder.build()
         Picasso.setSingletonInstance(built)
 

@@ -1,6 +1,5 @@
 package lt.blackbrackets.kasvalgyt.api.models
 
-import android.databinding.BaseObservable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import android.location.Location
@@ -10,7 +9,7 @@ import android.location.Location
  * Created by simonas on 25/01/2017.
  */
 
-class EatingPlace : BaseObservable() {
+class EatingPlace {
     @SerializedName("page_picture")
     @Expose
     var pagePicture: String? = null

@@ -6,18 +6,17 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
-    dataBinding.enabled true
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         applicationId "lt.blackbrackets.kasvalgyt"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 3
         versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -41,36 +40,33 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.google.android.gms:play-services:10.0.1'
-
-    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    kapt 'com.android.databinding:compiler:2.2.3'
     compile 'com.android.support:multidex:1.0.1'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.mcxiaoke.koi:core:0.5.3'
-    compile 'com.github.nitrico.lastadapter:lastadapter:2.0.0'
     compile 'com.chibatching:kotpref:1.6.0'
-    compile 'com.github.nitrico.fontbinder:fontbinder:1.0.4'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
-    compile 'com.patloew.rxlocation:rxlocation:1.0.1'
-    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
+    compile ('com.patloew.rxlocation:rxlocation:1.0.1') {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.4'
     compile 'com.rollbar:rollbar-android:0.2.0'
 
     //RX Retrofit
-    compile'com.google.code.gson:gson:2.4'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
 
+    compile 'com.google.android.gms:play-services-location:10.2.6'
 }
 
 repositories {

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    tools:context="lt.blackbrackets.kasvalgyt.MainActivity">
+    tools:context="lt.blackbrackets.kasvalgyt.views.activities.MainActivity">
 
     <RelativeLayout
         android:id="@+id/contentHolder"
