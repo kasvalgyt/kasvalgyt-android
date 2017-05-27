@@ -12,7 +12,7 @@ import android.location.Location
 class EatingPlace {
     @SerializedName("page_picture")
     @Expose
-    var pagePicture: String? = null
+    var pagePictureURL: String? = null
 
     @SerializedName("page_name")
     @Expose
@@ -36,7 +36,7 @@ class EatingPlace {
 
     @SerializedName("image")
     @Expose
-    var mealImage: String? = null
+    var mealImageURL: String? = null
 
     fun getDistanceInM(loc: Location)
             = pageLocation!!.getLocation().distanceTo(loc)

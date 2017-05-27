@@ -17,7 +17,7 @@
         android:paddingBottom="16dp"
         android:elevation="1dp">
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:layout_width="36dp"
             tools:src="@color/colorAccent"
             android:padding="2dp"
@@ -67,8 +67,8 @@
             android:padding="16dp"
             android:paddingBottom="8dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:src="@mipmap/blynas"
                 android:id="@+id/mealImageView"
