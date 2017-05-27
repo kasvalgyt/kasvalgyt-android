@@ -31,7 +31,8 @@ object Intents {
     }
 
     //method to get the right URL to use in the intent
-    fun openFbPage(context: Context, pageId: String) {
+    fun openFbPage(context: Context, facebookURL: String) {
+        var pageId = facebookURL.removePrefix("http://facebook.com/")
         if (Intents.isPackageExists(context, Intents.FACEBOOK_PACKAGE_NAME)) {
             var facebookUrl = "fb://page/" + pageId
             val facebookIntent = Intent(Intent.ACTION_VIEW)
@@ -40,6 +41,15 @@ object Intents {
         } else {
             var facebookUri = Uri.parse("https://www.facebook.com/" + pageId)
             var intent = Intent(Intent.ACTION_VIEW, facebookUri)
+            context.startActivity(intent)
+        }
+    }
+
+    fun openLink(context: Context, linkURL: String) {
+        if (linkURL.startsWith("https://www.facebook.com/")) {
+            openFbPage(context, linkURL)
+        } else {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkURL))
             context.startActivity(intent)
         }
     }

@@ -42,8 +42,9 @@ class EatingPlaceAdapter(val context: Context, var location: Location) : Recycle
         holder.itemView.distanceTx.text = item.getDistanceString(location)
 
         holder.itemView.openButton.setOnClickListener {
-            var pageId = item.pageLink!!.removePrefix("http://facebook.com/")
-            Intents.openFbPage(context, pageId)
+            item.pageLink?.also {
+                Intents.openLink(context, it)
+            }
         }
 
         if (item.pageLocation != null && item.pageLocation!!.latitude != null && item.pageLocation!!.longitude != null) {
@@ -85,7 +86,7 @@ class EatingPlaceAdapter(val context: Context, var location: Location) : Recycle
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.place_item, null)
+        val view = LayoutInflater.from(context).inflate(R.layout.place_item, parent, false)
         val viewholder = ViewHolder(view)
         return viewholder
     }
