@@ -13,6 +13,7 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
@@ -47,31 +48,28 @@ class MainActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.title = "   " + resources.getString(R.string.app_name)
 
-        @SuppressLint("NewApi")
-        if (currentVersion() >= 19) {
-            val tintManager = SystemBarTintManager(this)
-            tintManager.setNavigationBarTintEnabled(true)
-            tintManager.isStatusBarTintEnabled = true
-            tintManager.setNavigationBarTintColor(resources.getColor(R.color.nav_bar))
-            tintManager.setStatusBarTintColor(resources.getColor(R.color.nav_bar))
+        val tintManager = SystemBarTintManager(this)
+        tintManager.setNavigationBarTintEnabled(true)
+        tintManager.isStatusBarTintEnabled = true
+        tintManager.setNavigationBarTintColor(ContextCompat.getColor(this, R.color.nav_bar))
+        tintManager.setStatusBarTintColor(ContextCompat.getColor(this, R.color.nav_bar))
 
-            val drawable = ColorDrawable()
-            drawable.color = resources.getColor(R.color.colorPrimary).addAlphaToColor(230)
-            supportActionBar!!.setBackgroundDrawable(drawable)
+        val drawable = ColorDrawable()
+        drawable.color = ContextCompat.getColor(this, R.color.colorPrimary).addAlphaToColor(230)
+        supportActionBar!!.setBackgroundDrawable(drawable)
 
-            val height = getActionBarHeight(this) + getStatusBarHeight(this)
+        val height = getActionBarHeight() + getStatusBarHeight()
 
-            recyclerView.setPaddingRelative(0, height, 0, 48.dpToPx())
-            recyclerView.setPadding(0, height, 0, 48.dpToPx())
+        recyclerView.setPaddingRelative(0, height, 0, 48.dpToPx())
+        recyclerView.setPadding(0, height, 0, 48.dpToPx())
 
-            val navigationBarHeight = getNavigationBarHeight()
-            val layoutParams = RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT
-            )
-            layoutParams.bottomMargin = navigationBarHeight
-            myCoordinatorLayout.layoutParams = layoutParams
-        }
+        val navigationBarHeight = getNavigationBarHeight()
+        val layoutParams = RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
+        )
+        layoutParams.bottomMargin = navigationBarHeight
+        myCoordinatorLayout.layoutParams = layoutParams
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -81,11 +79,9 @@ class MainActivity : AppCompatActivity() {
         val mLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = mLayoutManager
 
-        requestLocation(myCoordinatorLayout, callback = { granted ->
-            granted?.also {
-                getLocation(applicationContext) { location ->
-                    getPlaces(location)
-                }
+        requestLocation(myCoordinatorLayout, callback = { _ ->
+            getLocation(applicationContext) { location ->
+                getPlaces(location)
             }
         })
 
@@ -116,6 +112,24 @@ class MainActivity : AppCompatActivity() {
                         deniedDialog.onPermissionDenied(response)
                     }
                 }).check()
+    }
+
+    fun getLocation(context: Context, f:(location: Location) -> Unit) {
+        val rxLocation = RxLocation(context)
+
+        val locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(5000)
+                .setExpirationDuration(30000)
+
+        locationRequest.numUpdates = 1
+
+        rxLocation.location().updates(locationRequest)
+                .subscribe({ address ->
+                    f.invoke(address)
+                }, { _ ->
+                    // TODO: error handling
+                })
     }
 
     fun getPlaces(location: Location) {
@@ -151,23 +165,5 @@ class MainActivity : AppCompatActivity() {
         recyclerView.removeAllViews()
         recyclerView.adapter = adapter
     }
-}
-
-fun getLocation(context: Context, f:(location: Location) -> Unit) {
-    val rxLocation = RxLocation(context)
-
-    val locationRequest = LocationRequest.create()
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-            .setInterval(5000)
-            .setExpirationDuration(30000)
-
-    locationRequest.numUpdates = 1
-
-    rxLocation.location().updates(locationRequest)
-            .subscribe({ address ->
-                f.invoke(address)
-            }, { _ ->
-               // TODO: error handling
-            })
 
 }

@@ -83,12 +83,13 @@ class EatingPlaceAdapter(val context: Context, var location: Location) : Recycle
                     .setStartPosition(0)
                     .show()
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.place_item, parent, false)
-        val viewholder = ViewHolder(view)
-        return viewholder
+        val holder = ViewHolder(view)
+        return holder
     }
 
     override fun getItemCount() = placeList.size

@@ -1,6 +1,5 @@
 package lt.blackbrackets.kasvalgyt.utils
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.location.Location
@@ -21,32 +20,33 @@ fun Int.addAlphaToColor(alpha: Int): Int {
     return Color.argb(alpha, Color.red(this), Color.green(this), Color.blue(this))
 }
 
-fun getActionBarHeight(context: Context): Int {
+fun Context.getActionBarHeight(): Int {
     val typedValue = TypedValue()
 
     var attributeResourceId = android.R.attr.actionBarSize
-    if (context is AppCompatActivity) {
+    if (this is AppCompatActivity) {
         attributeResourceId = R.attr.actionBarSize
     }
 
-    if (context.theme.resolveAttribute(attributeResourceId, typedValue, true)) {
-        return TypedValue.complexToDimensionPixelSize(typedValue.data, context.resources.displayMetrics)
+    if (theme.resolveAttribute(attributeResourceId, typedValue, true)) {
+        return TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
+    } else {
+        // fallback
+        return 48.dpToPx()
     }
-
-    return 48.dpToPx()
 }
 
-fun getStatusBarHeight(c : Context): Int {
+fun Context.getStatusBarHeight(): Int {
     var result = 0
-    val resourceId = c.getResources().getIdentifier("status_bar_height", "dimen", "android")
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
     if (resourceId > 0) {
-        result = c.getResources().getDimensionPixelSize(resourceId)
+        result = resources.getDimensionPixelSize(resourceId)
     }
     return result
 }
 
 
-fun Activity.getNavigationBarHeight(): Int {
+fun Context.getNavigationBarHeight(): Int {
     val hasMenuKey = ViewConfiguration.get(this).hasPermanentMenuKey()
     val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
     if (resourceId > 0 && !hasMenuKey) {

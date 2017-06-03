@@ -23,6 +23,7 @@ class App : MultiDexApplication() {
                 .setDownsampleEnabled(true)
                 .build();
 
-        Fresco.initialize(this, config);
+        Fresco.initialize(this, config)
+
     }
 }

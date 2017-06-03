@@ -9,9 +9,8 @@ import rx.Observable
  * Created by simonas on 25/01/2017.
  */
 interface KasValgytApi {
-    /**
-     * E.g. https://www.kasvalgyt.lt/api?date=2017-01-25
-     */
+
     @GET("api")
-    fun getPlaces(@Query("date") date : String) : Observable<List<EatingPlace>>
+    fun getPlaces(@Query("date") date : String): Observable<List<EatingPlace>>
+
 }
